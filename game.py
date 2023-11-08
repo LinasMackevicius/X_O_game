@@ -28,6 +28,7 @@ class TicTacToeGame:
         self._current_moves = []
         self._has_winner = False
         self._winning_combos = []
+        self._consecutive_to_win = 3
         self._setup_board()
 
     def _setup_board(self):
@@ -38,14 +39,28 @@ class TicTacToeGame:
         self._winning_combos = self._get_winning_combos()
 
     def _get_winning_combos(self):
-        rows = [
-            [(move.row, move.col) for move in row]
-            for row in self._current_moves
-        ]
-        columns = [list(col) for col in zip(*rows)]
-        first_diagonal = [row[i] for i, row in enumerate(rows)]
-        second_diagonal = [col[j] for j, col in enumerate(reversed(columns))]
-        return rows + columns + [first_diagonal, second_diagonal]
+        combos = []
+        # rows
+        for row in self._current_moves:
+            for start_col in range(self.board_size - 2):
+                combo = [(row[start_col + i].row, row[start_col + i].col) for i in range(3)]
+                combos.append(combo)
+
+        # columns
+        for col in range(self.board_size):
+            for start_row in range(self.board_size - 2):
+                combo = [(start_row + i, col) for i in range(3)]
+                combos.append(combo)
+
+        # diagonal
+        for start_row in range(self.board_size - 2):
+            for start_col in range(self.board_size - 2):
+                diagonal1 = [(start_row + i, start_col + i) for i in range(3)]
+                diagonal2 = [(start_row + i, start_col + 2 - i) for i in range(3)]
+                combos.append(diagonal1)
+                combos.append(diagonal2)
+
+        return combos
 
     def toggle_player(self):
         """Return a toggled player."""
