@@ -136,7 +136,7 @@ class TicTacToeBoard(tk.Tk):
 
     def resize_board(self):
         board_size_dialog = tk.simpledialog.askinteger("Resize Board", "Enter the new board size (e.g., 3 for 3x3):",
-                                                       minvalue=3, maxvalue=10)
+                                                       minvalue=1, maxvalue=10)
         if board_size_dialog is not None:
             self._game.reset_game(board_size=board_size_dialog)
             self.destroy()  # Destroy the current window
