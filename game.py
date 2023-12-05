@@ -147,13 +147,16 @@ class TicTacToeBoard(tk.Tk):
         board_size_dialog = tk.simpledialog.askinteger("Choose Board Size", "Enter the board size (e.g., 3 for 3x3):",
                                                        minvalue=3, maxvalue=10)
         if board_size_dialog is not None:
+            self.reset_board()
             self._game.reset_game(board_size=board_size_dialog)
-            self._create_board_grid()
+            self.destroy()  # Destroy the current window
+            self.__init__(self._game)  # Recreate the GUI with the updated board size
 
     def resize_board(self):
         board_size_dialog = tk.simpledialog.askinteger("Resize Board", "Enter the new board size (e.g., 3 for 3x3):",
                                                        minvalue=1, maxvalue=10)
         if board_size_dialog is not None:
+            self.reset_board()
             self._game.reset_game(board_size=board_size_dialog)
             self.destroy()  # Destroy the current window
             self.__init__(self._game)  # Recreate the GUI with the updated board size
@@ -212,7 +215,6 @@ class TicTacToeBoard(tk.Tk):
                 button.config(highlightbackground="red")
 
     def reset_board(self):
-        """Reset the game's board to play again."""
         self._game.reset_game()
         self._update_display(msg="Ready?")
         for button in self._cells.keys():

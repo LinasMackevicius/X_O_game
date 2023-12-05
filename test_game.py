@@ -1,7 +1,8 @@
 import unittest
 from unittest import TestCase
-
-from game import TicTacToeGame, Move
+from game import TicTacToeBoard, TicTacToeGame, Player, Move
+import tkinter as tk
+from unittest.mock import Mock, patch
 
 
 class TestTicTacToeGame(TestCase):
@@ -55,6 +56,48 @@ class TestTicTacToeGame(TestCase):
             # Assert
             # Add assertions to check that the player was toggled correctly
             self.assertNotEqual(initial_player, toggled_player)
+
+    def setUp(self):
+        self.game = TicTacToeGame()
+
+    def test_is_valid_move_valid(self):
+        # Arrange
+        valid_move = Move(row=0, col=0)
+        self.game._has_winner = False
+        self.game._current_moves[0][0] = Move(row=0, col=0, label="")  # Create a new Move object
+
+        # Act
+        result = self.game.is_valid_move(valid_move)
+
+        # Assert
+        self.assertTrue(result)
+
+    def test_is_valid_move_invalid_already_played(self):
+        # Arrange
+        played_move = Move(row=1, col=1)
+        self.game._has_winner = False
+        self.game._current_moves[1][1] = Move(row=1, col=1, label="X")  # Create a new Move object
+
+        # Act
+        result = self.game.is_valid_move(played_move)
+
+        # Assert
+        self.assertFalse(result)
+
+    def test_is_valid_move_invalid_has_winner(self):
+        # Arrange
+        move = Move(row=2, col=2)
+        self.game._has_winner = True
+        self.game._current_moves[2][2] = Move(row=2, col=2, label="")  # Create a new Move object
+
+        # Act
+        result = self.game.is_valid_move(move)
+
+        # Assert
+        self.assertFalse(result)
+
+    def tearDown(self):
+        pass
 
 
 if __name__ == '__main__':
